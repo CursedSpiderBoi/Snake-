@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://7fwjd4p7gd7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tf3oo"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="SnakeSegment" type="Panel" groups=["segments"]]
+offset_right = 49.0
+offset_bottom = 49.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tf3oo")

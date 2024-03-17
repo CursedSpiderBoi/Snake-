@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://fypwq7absgdf"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_3rqcx"]
+[ext_resource type="PackedScene" uid="uid://7fwjd4p7gd7" path="res://scenes/snake_segment.tscn" id="2_bu4rj"]
+[ext_resource type="PackedScene" uid="uid://c5xepbkveah2g" path="res://scenes/hud.tscn" id="3_85qrn"]
+[ext_resource type="PackedScene" uid="uid://dsb3m38675h2e" path="res://scenes/game_over_menu.tscn" id="3_csiex"]
+[ext_resource type="PackedScene" uid="uid://bikv25cdhqy61" path="res://scenes/food.tscn" id="5_gdjpb"]
+
+[node name="main" type="Node"]
+script = ExtResource("1_3rqcx")
+snake_scene = ExtResource("2_bu4rj")
+
+[node name="TextureRect" type="ColorRect" parent="."]
+texture_filter = 1
+custom_minimum_size = Vector2(1000, 1000)
+offset_top = 50.0
+offset_right = 1000.0
+offset_bottom = 1100.0
+
+[node name="hud" parent="." instance=ExtResource("3_85qrn")]
+
+[node name="MoveTimer" type="Timer" parent="."]
+wait_time = 0.2
+
+[node name="Food" parent="." instance=ExtResource("5_gdjpb")]
+offset_left = 11.0
+offset_top = -134.0
+offset_right = 60.0
+offset_bottom = -85.0
+
+[node name="GameOverMenu" parent="." instance=ExtResource("3_csiex")]
+process_mode = 2
+
+[connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
+[connection signal="restart" from="GameOverMenu" to="." method="_on_game_over_menu_restart"]

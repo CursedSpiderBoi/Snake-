@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c5xepbkveah2g"]
+
+[node name="hud" type="CanvasLayer"]
+
+[node name="ScorePanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(1000, 50)
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = 456.0
+offset_top = 13.0
+offset_right = 534.0
+offset_bottom = 36.0
+text = "Score  : 01"
