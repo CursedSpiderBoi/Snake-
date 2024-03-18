@@ -57,8 +57,8 @@ func add_segment(pos):
 	snake.append(SnakeSegment)
 
 	# Calculate opacity based on segment index
-	var opacity = 1.0 - (len(snake) - 1) * 0.1  # Decrease opacity by 0.1 for each segment
-	opacity = max(opacity, 0.3)  # Ensure minimum opacity is 0.3
+	var opacity = 1.0 - (len(snake) - 1) * 0.08
+	opacity = max(opacity, 0.08)  # Ensure minimum opacity is 0.01
 
 	# Set opacity for the segment
 	SnakeSegment.modulate = Color(1, 1, 1, opacity)
