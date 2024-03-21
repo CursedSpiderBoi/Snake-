@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://olua3a0j6kko" path="res://Have Idea.ttf" id="1_ni2jh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pp308"]
-bg_color = Color(0.219608, 0.654902, 0.815686, 1)
+bg_color = Color(0.25098, 0.682353, 0.631373, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10

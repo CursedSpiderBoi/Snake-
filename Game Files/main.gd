@@ -28,7 +28,6 @@ var can_move : bool =false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 		new_game()
-		
 func new_game():
 	get_tree().paused=false
 	get_tree().call_group("segments","queue_free")
@@ -39,8 +38,6 @@ func new_game():
 	can_move = true
 	generate_snake()
 	move_food()
-
-
 func generate_snake():
 	old_data.clear()
 	snake_data.clear()
@@ -48,7 +45,6 @@ func generate_snake():
 	
 	for i in range(3):
 		add_segment(start_pos+Vector2(0,i))
-
 func add_segment(pos):
 	snake_data.append(pos)
 	var SnakeSegment = snake_scene.instantiate()
@@ -57,12 +53,13 @@ func add_segment(pos):
 	snake.append(SnakeSegment)
 
 	# Calculate opacity based on segment index
-	var opacity = 1.0 - (len(snake) - 1) * 0.08
-	opacity = max(opacity, 0.08)  # Ensure minimum opacity is 0.01
+	var opacity_step = 1.0 / len(snake)
+	var opacity = 1.0
 
-	# Set opacity for the segment
-	SnakeSegment.modulate = Color(1, 1, 1, opacity)
-
+# Loop through all segments to set opacity
+	for i in range(len(snake)):
+		snake[i].modulate = Color(1, 1, 1, opacity)
+		opacity -= opacity_step
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	move_snake()
@@ -90,17 +87,29 @@ func start_game():
 
 
 func _on_move_timer_timeout():
-	can_move=true
-	
-	old_data=[]+snake_data
-	snake_data[0]+=move_direction
+	can_move = true
+	old_data = [] + snake_data
+	snake_data[0] += move_direction
+
+	# Wraparound logic
+	if snake_data[0].x < 0:
+		snake_data[0].x = cells - 1
+	elif snake_data[0].x >= cells:
+		snake_data[0].x = 0
+	elif snake_data[0].y < 0:
+		snake_data[0].y = cells - 1
+	elif snake_data[0].y >= cells:
+		snake_data[0].y = 0  
+
+	# Update snake segments positions
 	for i in range(len(snake_data)):
-		if i>0:
-			snake_data[i]=old_data[i-1]
-		snake[i].position = (snake_data[i]*cell_size)+Vector2(0,cell_size)
-	out_of_bounds()
+		if i > 0:
+			snake_data[i] = old_data[i - 1]
+		snake[i].position = (snake_data[i] * cell_size) + Vector2(0, cell_size)
+
 	self_eaten()
 	food_eaten()
+
 
 func food_eaten():
 	if snake_data[0]==food_pos:
@@ -110,23 +119,31 @@ func food_eaten():
 		regen_food=true
 		move_food()
 
-func out_of_bounds():
-	if snake_data[0].x<0 or snake_data[0].x>cells or snake_data[0].y<0 or snake_data[0].y >cells -1 :
-		end_game()
+#func out_of_bounds():
+	#if snake_data[0].x<0 or snake_data[0].x>cells or snake_data[0].y<0 or snake_data[0].y >cells -1 :
+		#end_game()
 func self_eaten():
 	for i in range (1,len(snake_data)):
 		if(snake_data[0]==snake_data[i]):
 			end_game()
 
-func move_food ():
+func move_food():
 	while regen_food:
 		regen_food = false
-		food_pos = Vector2(randi_range(0,cells-1),randi_range(0,cells-1))
+		food_pos = Vector2(randi_range(0, cells - 1), randi_range(0, cells - 1))
+		
+		# Check if food position collides with any segment of the snake
+		var collision = false
 		for i in snake_data:
-			if food_pos== i:
-				regen_food=true
-		$Food.position= (food_pos*cell_size)+Vector2(0,cell_size)
-		regen_food=false
+			if food_pos == i:
+				collision = true
+				break
+		
+		# If collision detected, regenerate food position
+		if collision:
+			regen_food = true
+		else:
+			$Food.position = (food_pos * cell_size) + Vector2(0, cell_size)
 
 func end_game():
 	$GameOverMenu.show()
